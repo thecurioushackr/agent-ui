@@ -58,7 +58,8 @@ const Sessions = () => {
     isEndpointActive,
     isEndpointLoading,
     sessionsData,
-    hydrated
+    hydrated,
+    hasStorage
   } = usePlaygroundStore()
   const [isScrolling, setIsScrolling] = useState(false)
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
@@ -98,11 +99,11 @@ const Sessions = () => {
   }, [hydrated])
 
   useEffect(() => {
-    if (!selectedEndpoint || !agentId) return
+    if (!selectedEndpoint || !agentId || !hasStorage) return
     if (!isEndpointLoading) {
       getSessions(agentId)
     }
-  }, [selectedEndpoint, agentId, getSessions, isEndpointLoading])
+  }, [selectedEndpoint, agentId, getSessions, isEndpointLoading, hasStorage])
 
   useEffect(() => {
     if (sessionId) {
@@ -125,6 +126,10 @@ const Sessions = () => {
     []
   )
 
+  useEffect(() => {
+    console.log(sessionsData, 'sessionsData')
+  })
+
   if (isSessionsLoading || isEndpointLoading)
     return (
       <div className="w-full">
@@ -138,12 +143,13 @@ const Sessions = () => {
     <div className="w-full">
       <div className="mb-2 w-full text-xs font-medium uppercase">Sessions</div>
       <div
-        className={`h-[calc(100vh-345px)] overflow-y-auto font-geist transition-all duration-300 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar]:transition-opacity [&::-webkit-scrollbar]:duration-300 ${isScrolling ? '[&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-background [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:opacity-0' : '[&::-webkit-scrollbar]:opacity-100'}`}
+        className={`font-geist h-[calc(100vh-345px)] overflow-y-auto transition-all duration-300 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar]:transition-opacity [&::-webkit-scrollbar]:duration-300 ${isScrolling ? '[&::-webkit-scrollbar-thumb]:bg-background [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:opacity-0' : '[&::-webkit-scrollbar]:opacity-100'}`}
         onScroll={handleScroll}
         onMouseOver={() => setIsScrolling(true)}
         onMouseLeave={handleScroll}
       >
         {!isEndpointActive ||
+        !hasStorage ||
         (!isSessionsLoading && (!sessionsData || sessionsData.length === 0)) ? (
           <SessionBlankState />
         ) : (

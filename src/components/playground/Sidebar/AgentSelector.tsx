@@ -15,19 +15,22 @@ import { useEffect } from 'react'
 import useChatActions from '@/hooks/useChatActions'
 
 export function AgentSelector() {
-  const { agents, setMessages, setSelectedModel } = usePlaygroundStore()
+  const { agents, setMessages, setSelectedModel, setHasStorage } =
+    usePlaygroundStore()
   const { focusChatInput } = useChatActions()
   const [agentId, setAgentId] = useQueryState('agent', {
     parse: (value) => value || undefined,
     history: 'push'
   })
   const [, setSessionId] = useQueryState('session')
+
   // Set the model when the component mounts if an agent is already selected
   useEffect(() => {
     if (agentId && agents.length > 0) {
       const agent = agents.find((agent) => agent.value === agentId)
       if (agent) {
         setSelectedModel(agent.model.provider || '')
+        setHasStorage(!!agent.storage)
         if (agent.model.provider) {
           focusChatInput()
         }
@@ -40,13 +43,13 @@ export function AgentSelector() {
 
   const handleOnValueChange = (value: string) => {
     const newAgent = value === agentId ? '' : value
-    setSelectedModel(
-      agents.find((agent) => agent.value === newAgent)?.model.provider || ''
-    )
+    const selectedAgent = agents.find((agent) => agent.value === newAgent)
+    setSelectedModel(selectedAgent?.model.provider || '')
+    setHasStorage(!!selectedAgent?.storage)
     setAgentId(newAgent)
     setMessages([])
     setSessionId(null)
-    if (agents.find((agent) => agent.value === newAgent)?.model.provider) {
+    if (selectedAgent?.model.provider) {
       focusChatInput()
     }
   }
@@ -56,10 +59,10 @@ export function AgentSelector() {
       value={agentId || ''}
       onValueChange={(value) => handleOnValueChange(value)}
     >
-      <SelectTrigger className="h-9 w-full rounded-xl border border-primary/15 bg-primaryAccent text-xs font-medium uppercase">
+      <SelectTrigger className="border-primary/15 bg-primaryAccent h-9 w-full rounded-xl border text-xs font-medium uppercase">
         <SelectValue placeholder="Select Agent" />
       </SelectTrigger>
-      <SelectContent className="border-none bg-primaryAccent font-dmmono shadow-lg">
+      <SelectContent className="bg-primaryAccent font-dmmono border-none shadow-lg">
         {agents.map((agent, index) => (
           <SelectItem
             className="cursor-pointer"
