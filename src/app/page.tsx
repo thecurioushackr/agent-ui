@@ -6,7 +6,7 @@ import { Suspense } from 'react'
 export default function Home() {
   return (
     <Suspense>
-      <div className="bg-background/80 flex h-screen">
+      <div className="flex h-screen bg-background/80">
         <Sidebar />
         <ChatArea />
       </div>
