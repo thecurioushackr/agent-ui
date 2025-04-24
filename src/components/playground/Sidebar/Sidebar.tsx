@@ -140,9 +140,9 @@ const Endpoint = () => {
         <div className="flex w-full items-center gap-1">
           <motion.div
             className="relative flex h-9 w-full cursor-pointer items-center justify-between rounded-xl border border-primary/15 bg-accent p-3 uppercase"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-            onClick={() => setIsEditing(true)}
+            // onMouseEnter={() => setIsHovering(true)}
+            // onMouseLeave={() => setIsHovering(false)}
+            // onClick={() => setIsEditing(true)}
             transition={{ type: 'spring', stiffness: 400, damping: 10 }}
           >
             <AnimatePresence mode="wait">
