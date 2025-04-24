@@ -66,7 +66,9 @@ const useSessionLoader = () => {
         )) as SessionResponse
 
         if (response && response.memory) {
-          const sessionHistory = response.runs ?? response.memory.chats
+          const sessionHistory = response.runs
+            ? response.runs
+            : response.memory.chats
 
           if (sessionHistory && Array.isArray(sessionHistory)) {
             const messagesForPlayground = sessionHistory.flatMap((run) => {
@@ -103,7 +105,6 @@ const useSessionLoader = () => {
                     []
                   )
                 ]
-
 
                 filteredMessages.push({
                   role: 'agent',
