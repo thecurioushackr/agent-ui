@@ -68,7 +68,7 @@ const useSessionLoader = () => {
         if (response && response.memory) {
           const sessionHistory = response.runs
             ? response.runs
-            : response.memory.chats
+            : response.memory.runs
 
           if (sessionHistory && Array.isArray(sessionHistory)) {
             const messagesForPlayground = sessionHistory.flatMap((run) => {
