@@ -104,7 +104,6 @@ const useSessionLoader = () => {
                   )
                 ]
 
-                console.log('run.response.content', run.response.content)
 
                 filteredMessages.push({
                   role: 'agent',
@@ -118,7 +117,6 @@ const useSessionLoader = () => {
                   created_at: run.response.created_at
                 })
               }
-              console.log('filteredMessages', filteredMessages)
               return filteredMessages
             })
 
