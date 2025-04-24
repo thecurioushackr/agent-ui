@@ -99,7 +99,7 @@ const useAIChatStreamHandler = () => {
             if (chunk.event === RunEvent.RunStarted) {
               newSessionId = chunk.session_id as string
               setSessionId(chunk.session_id as string)
-              if (hasStorage) {
+              if (hasStorage && !sessionId) {
                 const sessionData = {
                   session_id: chunk.session_id as string,
                   title: formData.get('message') as string,
