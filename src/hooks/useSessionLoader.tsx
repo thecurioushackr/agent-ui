@@ -11,11 +11,13 @@ import {
   ReasoningMessage,
   ChatEntry
 } from '@/types/playground'
+import { getJsonMarkdown } from '@/lib/utils'
 
 interface SessionResponse {
   session_id: string
   agent_id: string
   user_id: string | null
+  runs?: ChatEntry[]
   memory: {
     runs?: ChatEntry[]
     chats?: ChatEntry[]
@@ -64,7 +66,7 @@ const useSessionLoader = () => {
         )) as SessionResponse
 
         if (response && response.memory) {
-          const sessionHistory = response.memory.runs ?? response.memory.chats
+          const sessionHistory = response.runs ?? response.memory.chats
 
           if (sessionHistory && Array.isArray(sessionHistory)) {
             const messagesForPlayground = sessionHistory.flatMap((run) => {
@@ -102,6 +104,8 @@ const useSessionLoader = () => {
                   )
                 ]
 
+                console.log('run.response.content', run.response.content)
+
                 filteredMessages.push({
                   role: 'agent',
                   content: (run.response.content as string) ?? '',
@@ -114,6 +118,7 @@ const useSessionLoader = () => {
                   created_at: run.response.created_at
                 })
               }
+              console.log('filteredMessages', filteredMessages)
               return filteredMessages
             })
 
@@ -128,6 +133,12 @@ const useSessionLoader = () => {
                   return {
                     ...message,
                     content: textContent
+                  }
+                }
+                if (typeof message.content !== 'string') {
+                  return {
+                    ...message,
+                    content: getJsonMarkdown(message.content)
                   }
                 }
                 return message

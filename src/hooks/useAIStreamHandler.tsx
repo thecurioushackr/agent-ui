@@ -9,6 +9,7 @@ import { constructEndpointUrl } from '@/lib/constructEndpointUrl'
 import useAIResponseStream from './useAIResponseStream'
 import { ToolCall } from '@/types/playground'
 import { useQueryState } from 'nuqs'
+import { getJsonMarkdown } from '@/lib/utils'
 
 /**
  * useAIChatStreamHandler is responsible for making API calls and handling the stream response.
@@ -137,6 +138,16 @@ const useAIChatStreamHandler = () => {
                   if (chunk.audio) {
                     lastMessage.audio = chunk.audio
                   }
+                } else if (
+                  // Handle non-streaming response like structured output
+                  lastMessage &&
+                  lastMessage.role === 'agent' &&
+                  typeof chunk?.content !== 'string'
+                ) {
+                  const jsonBlock = getJsonMarkdown(chunk?.content)
+
+                  lastMessage.content += jsonBlock
+                  lastContent = jsonBlock
                 } else if (
                   chunk.response_audio?.transcript &&
                   typeof chunk.response_audio?.transcript === 'string'
