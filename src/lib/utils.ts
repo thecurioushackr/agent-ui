@@ -36,7 +36,8 @@ export const getUserId = (): string => {
   const store = usePlaygroundStore.getState()
   const userId = store.userId
   return userId
-  
+}
+
 export const getJsonMarkdown = (content: object = {}) => {
   let jsonBlock = ''
   try {
@@ -46,5 +47,4 @@ export const getJsonMarkdown = (content: object = {}) => {
   }
 
   return jsonBlock
-
 }
