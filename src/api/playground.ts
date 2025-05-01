@@ -5,19 +5,16 @@ import { APIRoutes } from './routes'
 import { Agent, ComboboxAgent, SessionEntry } from '@/types/playground'
 import { usePlaygroundStore } from '@/store'
 
-const validateUserId = (): string => {
+const getUserId = (): string => {
   const store = usePlaygroundStore.getState()
   const userId = store.userId
-  if (!userId) {
-    return store.ensureUserId()
-  }
   return userId
 }
 
 export const getPlaygroundAgentsAPI = async (
   endpoint: string
 ): Promise<ComboboxAgent[]> => {
-  const validUserId = validateUserId()
+  const validUserId = getUserId()
   const url = `${APIRoutes.GetPlaygroundAgents(endpoint)}?user_id=${validUserId}`
   try {
     const response = await fetch(url, { method: 'GET' })
@@ -41,7 +38,7 @@ export const getPlaygroundAgentsAPI = async (
 }
 
 export const getPlaygroundStatusAPI = async (base: string): Promise<number> => {
-  const validUserId = validateUserId()
+  const validUserId = getUserId()
   const response = await fetch(
     `${APIRoutes.PlaygroundStatus(base)}?user_id=${validUserId}`,
     {
@@ -55,7 +52,7 @@ export const getAllPlaygroundSessionsAPI = async (
   base: string,
   agentId: string
 ): Promise<SessionEntry[]> => {
-  const validUserId = validateUserId()
+  const validUserId = getUserId()
   try {
     const response = await fetch(
       `${APIRoutes.GetPlaygroundSessions(base, agentId)}?user_id=${validUserId}`,
@@ -81,7 +78,7 @@ export const getPlaygroundSessionAPI = async (
   agentId: string,
   sessionId: string
 ) => {
-  const validUserId = validateUserId()
+  const validUserId = getUserId()
   const response = await fetch(
     `${APIRoutes.GetPlaygroundSession(base, agentId, sessionId)}?user_id=${validUserId}`,
     {
@@ -96,7 +93,7 @@ export const deletePlaygroundSessionAPI = async (
   agentId: string,
   sessionId: string
 ) => {
-  const validUserId = validateUserId()
+  const validUserId = getUserId()
   const response = await fetch(
     `${APIRoutes.DeletePlaygroundSession(base, agentId, sessionId)}?user_id=${validUserId}`,
     {

@@ -18,7 +18,6 @@ interface Agent {
 
 interface PlaygroundStore {
   userId: string
-  ensureUserId: () => string
   hydrated: boolean
   setHydrated: () => void
   streamingErrorMessage: string
@@ -66,17 +65,8 @@ interface PlaygroundStore {
 
 export const usePlaygroundStore = create<PlaygroundStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       userId: uuidv4(),
-      ensureUserId: () => {
-        const state = get()
-        if (!state.userId) {
-          const newUserId = uuidv4()
-          set({ userId: newUserId })
-          return newUserId
-        }
-        return state.userId
-      },
       hydrated: false,
       setHydrated: () => set({ hydrated: true }),
       streamingErrorMessage: '',
