@@ -246,7 +246,8 @@ const useAIChatStreamHandler = () => {
       setSessionsData,
       sessionId,
       setSessionId,
-      hasStorage
+      hasStorage,
+      userId
     ]
   )
 

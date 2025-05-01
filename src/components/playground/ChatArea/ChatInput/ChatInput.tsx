@@ -31,7 +31,8 @@ const ChatInput = () => {
       await handleStreamResponse(currentMessage)
     } catch (error) {
       toast.error(
-        `Error in handleSubmit: ${error instanceof Error ? error.message : String(error)
+        `Error in handleSubmit: ${
+          error instanceof Error ? error.message : String(error)
         }`
       )
     }

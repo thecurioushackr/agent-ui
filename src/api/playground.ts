@@ -5,19 +5,19 @@ import { APIRoutes } from './routes'
 import { Agent, ComboboxAgent, SessionEntry } from '@/types/playground'
 import { usePlaygroundStore } from '@/store'
 
-const validateUserId = (userId: string | undefined): string => {
+const validateUserId = (): string => {
+  const store = usePlaygroundStore.getState()
+  const userId = store.userId
   if (!userId) {
-    const store = usePlaygroundStore.getState()
     return store.ensureUserId()
   }
   return userId
 }
 
 export const getPlaygroundAgentsAPI = async (
-  endpoint: string,
-  userId: string
+  endpoint: string
 ): Promise<ComboboxAgent[]> => {
-  const validUserId = validateUserId(userId)
+  const validUserId = validateUserId()
   const url = `${APIRoutes.GetPlaygroundAgents(endpoint)}?user_id=${validUserId}`
   try {
     const response = await fetch(url, { method: 'GET' })
@@ -40,11 +40,8 @@ export const getPlaygroundAgentsAPI = async (
   }
 }
 
-export const getPlaygroundStatusAPI = async (
-  base: string,
-  userId: string
-): Promise<number> => {
-  const validUserId = validateUserId(userId)
+export const getPlaygroundStatusAPI = async (base: string): Promise<number> => {
+  const validUserId = validateUserId()
   const response = await fetch(
     `${APIRoutes.PlaygroundStatus(base)}?user_id=${validUserId}`,
     {
@@ -56,10 +53,9 @@ export const getPlaygroundStatusAPI = async (
 
 export const getAllPlaygroundSessionsAPI = async (
   base: string,
-  agentId: string,
-  userId: string
+  agentId: string
 ): Promise<SessionEntry[]> => {
-  const validUserId = validateUserId(userId)
+  const validUserId = validateUserId()
   try {
     const response = await fetch(
       `${APIRoutes.GetPlaygroundSessions(base, agentId)}?user_id=${validUserId}`,
@@ -83,10 +79,9 @@ export const getAllPlaygroundSessionsAPI = async (
 export const getPlaygroundSessionAPI = async (
   base: string,
   agentId: string,
-  sessionId: string,
-  userId: string
+  sessionId: string
 ) => {
-  const validUserId = validateUserId(userId)
+  const validUserId = validateUserId()
   const response = await fetch(
     `${APIRoutes.GetPlaygroundSession(base, agentId, sessionId)}?user_id=${validUserId}`,
     {
@@ -99,10 +94,9 @@ export const getPlaygroundSessionAPI = async (
 export const deletePlaygroundSessionAPI = async (
   base: string,
   agentId: string,
-  sessionId: string,
-  userId: string
+  sessionId: string
 ) => {
-  const validUserId = validateUserId(userId)
+  const validUserId = validateUserId()
   const response = await fetch(
     `${APIRoutes.DeletePlaygroundSession(base, agentId, sessionId)}?user_id=${validUserId}`,
     {
