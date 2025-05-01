@@ -10,13 +10,18 @@ import Icon from '@/components/ui/icon'
 
 const ChatInput = () => {
   const { chatInputRef } = usePlaygroundStore()
+  const userId = usePlaygroundStore((state) => state.userId)
 
   const { handleStreamResponse } = useAIChatStreamHandler()
   const [selectedAgent] = useQueryState('agent')
   const [inputMessage, setInputMessage] = useState('')
   const isStreaming = usePlaygroundStore((state) => state.isStreaming)
+
   const handleSubmit = async () => {
     if (!inputMessage.trim()) return
+    if (!userId) {
+      return
+    }
 
     const currentMessage = inputMessage
     setInputMessage('')

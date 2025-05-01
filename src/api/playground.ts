@@ -3,11 +3,13 @@ import { toast } from 'sonner'
 import { APIRoutes } from './routes'
 
 import { Agent, ComboboxAgent, SessionEntry } from '@/types/playground'
+import { getUserId } from '@/lib/utils'
 
 export const getPlaygroundAgentsAPI = async (
   endpoint: string
 ): Promise<ComboboxAgent[]> => {
-  const url = APIRoutes.GetPlaygroundAgents(endpoint)
+  const userId = getUserId()
+  const url = `${APIRoutes.GetPlaygroundAgents(endpoint)}?user_id=${userId}`
   try {
     const response = await fetch(url, { method: 'GET' })
     if (!response.ok) {
@@ -30,9 +32,13 @@ export const getPlaygroundAgentsAPI = async (
 }
 
 export const getPlaygroundStatusAPI = async (base: string): Promise<number> => {
-  const response = await fetch(APIRoutes.PlaygroundStatus(base), {
-    method: 'GET'
-  })
+  const userId = getUserId()
+  const response = await fetch(
+    `${APIRoutes.PlaygroundStatus(base)}?user_id=${userId}`,
+    {
+      method: 'GET'
+    }
+  )
   return response.status
 }
 
@@ -40,9 +46,10 @@ export const getAllPlaygroundSessionsAPI = async (
   base: string,
   agentId: string
 ): Promise<SessionEntry[]> => {
+  const userId = getUserId()
   try {
     const response = await fetch(
-      APIRoutes.GetPlaygroundSessions(base, agentId),
+      `${APIRoutes.GetPlaygroundSessions(base, agentId)}?user_id=${userId}`,
       {
         method: 'GET'
       }
@@ -65,8 +72,9 @@ export const getPlaygroundSessionAPI = async (
   agentId: string,
   sessionId: string
 ) => {
+  const userId = getUserId()
   const response = await fetch(
-    APIRoutes.GetPlaygroundSession(base, agentId, sessionId),
+    `${APIRoutes.GetPlaygroundSession(base, agentId, sessionId)}?user_id=${userId}`,
     {
       method: 'GET'
     }
@@ -79,8 +87,9 @@ export const deletePlaygroundSessionAPI = async (
   agentId: string,
   sessionId: string
 ) => {
+  const userId = getUserId()
   const response = await fetch(
-    APIRoutes.DeletePlaygroundSession(base, agentId, sessionId),
+    `${APIRoutes.DeletePlaygroundSession(base, agentId, sessionId)}?user_id=${userId}`,
     {
       method: 'DELETE'
     }

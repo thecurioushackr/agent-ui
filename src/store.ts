@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { v4 as uuidv4 } from 'uuid'
 
 import {
   type PlaygroundChatMessage,
@@ -16,6 +17,7 @@ interface Agent {
 }
 
 interface PlaygroundStore {
+  userId: string
   hydrated: boolean
   setHydrated: () => void
   streamingErrorMessage: string
@@ -64,6 +66,7 @@ interface PlaygroundStore {
 export const usePlaygroundStore = create<PlaygroundStore>()(
   persist(
     (set) => ({
+      userId: uuidv4(),
       hydrated: false,
       setHydrated: () => set({ hydrated: true }),
       streamingErrorMessage: '',
@@ -111,10 +114,14 @@ export const usePlaygroundStore = create<PlaygroundStore>()(
       name: 'endpoint-storage',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        selectedEndpoint: state.selectedEndpoint
+        selectedEndpoint: state.selectedEndpoint,
+        userId: state.userId
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated?.()
+        if (state && !state.userId) {
+          state.userId = uuidv4()
+        }
       }
     }
   )

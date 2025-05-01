@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-
+import { usePlaygroundStore } from '@/store'
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -30,6 +30,12 @@ export const isValidUrl = (url: string): boolean => {
   } catch {
     return false
   }
+}
+
+export const getUserId = (): string => {
+  const store = usePlaygroundStore.getState()
+  const userId = store.userId
+  return userId
 }
 
 export const getJsonMarkdown = (content: object = {}) => {

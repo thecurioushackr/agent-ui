@@ -190,10 +190,6 @@ const ChatBlankState = () => {
             text="VISIT AGENT PLAYGROUND"
           />
         </motion.div>
-        <div className="rounded-lg bg-yellow-800 px-2 py-2 text-xs text-yellow-200">
-          Note: Anything you send in this demo chat is public and visible to
-          others. Please do not share private or sensitive information.
-        </div>
       </div>
     </section>
   )
