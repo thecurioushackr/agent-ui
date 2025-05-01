@@ -20,7 +20,6 @@ const ChatInput = () => {
   const handleSubmit = async () => {
     if (!inputMessage.trim()) return
     if (!userId) {
-      toast.error('User ID not found')
       return
     }
 
