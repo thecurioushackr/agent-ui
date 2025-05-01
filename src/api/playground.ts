@@ -14,8 +14,8 @@ const getUserId = (): string => {
 export const getPlaygroundAgentsAPI = async (
   endpoint: string
 ): Promise<ComboboxAgent[]> => {
-  const validUserId = getUserId()
-  const url = `${APIRoutes.GetPlaygroundAgents(endpoint)}?user_id=${validUserId}`
+  const userId = getUserId()
+  const url = `${APIRoutes.GetPlaygroundAgents(endpoint)}?user_id=${userId}`
   try {
     const response = await fetch(url, { method: 'GET' })
     if (!response.ok) {
@@ -38,9 +38,9 @@ export const getPlaygroundAgentsAPI = async (
 }
 
 export const getPlaygroundStatusAPI = async (base: string): Promise<number> => {
-  const validUserId = getUserId()
+  const userId = getUserId()
   const response = await fetch(
-    `${APIRoutes.PlaygroundStatus(base)}?user_id=${validUserId}`,
+    `${APIRoutes.PlaygroundStatus(base)}?user_id=${userId}`,
     {
       method: 'GET'
     }
@@ -52,10 +52,10 @@ export const getAllPlaygroundSessionsAPI = async (
   base: string,
   agentId: string
 ): Promise<SessionEntry[]> => {
-  const validUserId = getUserId()
+  const userId = getUserId()
   try {
     const response = await fetch(
-      `${APIRoutes.GetPlaygroundSessions(base, agentId)}?user_id=${validUserId}`,
+      `${APIRoutes.GetPlaygroundSessions(base, agentId)}?user_id=${userId}`,
       {
         method: 'GET'
       }
@@ -78,9 +78,9 @@ export const getPlaygroundSessionAPI = async (
   agentId: string,
   sessionId: string
 ) => {
-  const validUserId = getUserId()
+  const userId = getUserId()
   const response = await fetch(
-    `${APIRoutes.GetPlaygroundSession(base, agentId, sessionId)}?user_id=${validUserId}`,
+    `${APIRoutes.GetPlaygroundSession(base, agentId, sessionId)}?user_id=${userId}`,
     {
       method: 'GET'
     }
@@ -93,9 +93,9 @@ export const deletePlaygroundSessionAPI = async (
   agentId: string,
   sessionId: string
 ) => {
-  const validUserId = getUserId()
+  const userId = getUserId()
   const response = await fetch(
-    `${APIRoutes.DeletePlaygroundSession(base, agentId, sessionId)}?user_id=${validUserId}`,
+    `${APIRoutes.DeletePlaygroundSession(base, agentId, sessionId)}?user_id=${userId}`,
     {
       method: 'DELETE'
     }
