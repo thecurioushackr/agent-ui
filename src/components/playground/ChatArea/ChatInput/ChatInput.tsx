@@ -10,13 +10,19 @@ import Icon from '@/components/ui/icon'
 
 const ChatInput = () => {
   const { chatInputRef } = usePlaygroundStore()
+  const userId = usePlaygroundStore((state) => state.userId)
 
   const { handleStreamResponse } = useAIChatStreamHandler()
   const [selectedAgent] = useQueryState('agent')
   const [inputMessage, setInputMessage] = useState('')
   const isStreaming = usePlaygroundStore((state) => state.isStreaming)
+
   const handleSubmit = async () => {
     if (!inputMessage.trim()) return
+    if (!userId) {
+      toast.error('User ID not found')
+      return
+    }
 
     const currentMessage = inputMessage
     setInputMessage('')
@@ -25,8 +31,7 @@ const ChatInput = () => {
       await handleStreamResponse(currentMessage)
     } catch (error) {
       toast.error(
-        `Error in handleSubmit: ${
-          error instanceof Error ? error.message : String(error)
+        `Error in handleSubmit: ${error instanceof Error ? error.message : String(error)
         }`
       )
     }

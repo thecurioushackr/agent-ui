@@ -26,6 +26,7 @@ const useAIChatStreamHandler = () => {
   const setIsStreaming = usePlaygroundStore((state) => state.setIsStreaming)
   const setSessionsData = usePlaygroundStore((state) => state.setSessionsData)
   const hasStorage = usePlaygroundStore((state) => state.hasStorage)
+  const userId = usePlaygroundStore((state) => state.userId)
   const { streamResponse } = useAIResponseStream()
 
   const updateMessagesWithErrorState = useCallback(() => {
@@ -90,6 +91,7 @@ const useAIChatStreamHandler = () => {
 
         formData.append('stream', 'true')
         formData.append('session_id', sessionId ?? '')
+        formData.append('user_id', userId)
 
         await streamResponse({
           apiUrl: playgroundRunUrl,
