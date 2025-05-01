@@ -36,4 +36,15 @@ export const getUserId = (): string => {
   const store = usePlaygroundStore.getState()
   const userId = store.userId
   return userId
+  
+export const getJsonMarkdown = (content: object = {}) => {
+  let jsonBlock = ''
+  try {
+    jsonBlock = `\`\`\`json\n${JSON.stringify(content, null, 2)}\n\`\`\``
+  } catch {
+    jsonBlock = `\`\`\`\n${String(content)}\n\`\`\``
+  }
+
+  return jsonBlock
+
 }
