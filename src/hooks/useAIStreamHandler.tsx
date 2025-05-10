@@ -96,19 +96,31 @@ const useAIChatStreamHandler = () => {
           apiUrl: playgroundRunUrl,
           requestBody: formData,
           onChunk: (chunk: RunResponse) => {
-            if (chunk.event === RunEvent.RunStarted) {
+            if (
+              chunk.event === RunEvent.RunStarted ||
+              chunk.event === RunEvent.ReasoningStarted
+            ) {
               newSessionId = chunk.session_id as string
               setSessionId(chunk.session_id as string)
-              if (hasStorage && !sessionId) {
+              if (
+                hasStorage &&
+                (!sessionId || sessionId !== chunk.session_id) &&
+                chunk.session_id
+              ) {
                 const sessionData = {
                   session_id: chunk.session_id as string,
                   title: formData.get('message') as string,
                   created_at: chunk.created_at
                 }
-                setSessionsData((prevSessionsData) => [
-                  sessionData,
-                  ...(prevSessionsData ?? [])
-                ])
+                setSessionsData((prevSessionsData) => {
+                  const sessionExists = prevSessionsData?.some(
+                    (session) => session.session_id === chunk.session_id
+                  )
+                  if (sessionExists) {
+                    return prevSessionsData
+                  }
+                  return [sessionData, ...(prevSessionsData ?? [])]
+                })
               }
             } else if (chunk.event === RunEvent.RunResponse) {
               setMessages((prevMessages) => {
